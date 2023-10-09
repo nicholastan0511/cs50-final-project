@@ -115,6 +115,18 @@ def register():
     # render the register page when user access the register page
     return render_template("register.html")
 
+@app.route("/search")
+def search():
+    # get the query
+    q = request.args.get("food")
+
+    if not q:
+        foods = []
+    else:
+    # query the food from the csv file
+        foods = lookup(q)
+
+    return render_template("search.html", foods=foods)
 
         
 
