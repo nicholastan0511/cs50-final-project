@@ -6,7 +6,7 @@ from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import apology, login_required
+from helpers import apology, login_required, lookup
 
 # Configure application
 app = Flask(__name__)
@@ -30,7 +30,16 @@ def after_request(response):
 @app.route("/")
 @login_required
 def index():
-    return apology("mammia", 403)
+    # get the query
+    q = request.args.get("food")
+
+    if not q:
+        foods = []
+    else:
+    # query the food from the csv file
+        foods = lookup(q)
+
+    return render_template("index.html", foods=foods)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -101,7 +110,7 @@ def register():
 
         # add successful cases to the database and redirect user to the login page
         db.execute("INSERT INTO users (username, hash) VALUES (?, ?)", username, generate_password_hash(password, method='pbkdf2', salt_length=16))
-        redirect("/login");
+        return redirect("/login");
     
     # render the register page when user access the register page
     return render_template("register.html")

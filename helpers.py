@@ -1,10 +1,5 @@
-# import csv
-# import datetime
-# import pytz
-# import requests
-# import subprocess
-# import urllib
-# import uuid
+import csv
+import requests
 
 from flask import redirect, render_template, session
 from functools import wraps
@@ -38,4 +33,14 @@ def login_required(f):
         return f(*args, **kwargs)
     return decorated_function
 
+def lookup(food):
+    file_name = open("./database/nutrition.csv")
+    data = csv.DictReader(file_name)
 
+    food_list = []
+
+    for row in data:
+        if row["name"].__contains__(food.lower()):
+            food_list.append(row)
+            
+    return food_list
