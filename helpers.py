@@ -40,7 +40,7 @@ def lookup(food):
     food_list = []
 
     for row in data:
-        if row["name"].__contains__(food.lower()):
+        if row["name"].lower().__contains__(food.lower()):
             food_list.append(row)
             
     return food_list
