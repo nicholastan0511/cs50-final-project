@@ -30,16 +30,10 @@ def after_request(response):
 @app.route("/")
 @login_required
 def index():
-    # get the query
-    q = request.args.get("food")
+    d
 
-    if not q:
-        foods = []
-    else:
-    # query the food from the csv file
-        foods = lookup(q)
 
-    return render_template("index.html", foods=foods)
+    return apology("mamamia")
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -69,8 +63,8 @@ def login():
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
 
-        # Redirect user to home page
-        return redirect("/")
+        # Redirect user to introduction page to submit physical information
+        return redirect("/introduction")
 
     # User reached route via GET (as by clicking a link or via redirect)
     else:
@@ -129,15 +123,38 @@ def search():
     return render_template("search.html", foods=foods)
 
         
-@app.route("/introduction")
+@app.route("/introduction", methods=["GET", "POST"])
+@login_required
 def intro():
-    weight = request.form.get("weight")
-    height = request.form.get("height")
-    freq = request.form.get("freq")
-    goal = request.form.get("goal")
+    if request.method == "POST":
+        age = float(request.form.get("age"))
+        weight = float(request.form.get("weight"))
+        height = float(request.form.get("height"))
+        freq = request.form.get("freq")
+        goal = request.form.get("goal")
+        sex = request.form.get("sex")
 
-    db.execute("INSERT INTO build (user_id, height, weight, freq, goal) VALUES (?, ?, ?, ?, ?)", session["user_id"], height, weight, freq, goal)
+        # ensure user inputs all fields
+        if not weight or not height or not age:
+            return apology("Please fill all fields", 403)
+        elif weight <= 0 or height <= 0 or weight > 200 or height > 300:
+            return apology("Please input the appropriate height or weight!", 403)
+        elif age <= 0 or age > 100:
+            return apology("Please fill in appropriate age!", 403)
 
-    return redirect("/")
+        # update the database
+        db.execute("INSERT INTO build (user_id, age, height, weight, freq, goal, sex) VALUES (?, ?, ?, ?, ?, ?, ?)", session["user_id"], age, height, weight, freq, goal, sex)
+
+        return redirect("/")
+    
+    else:
+        # check if user's physical information is already in the database
+        user_info = db.execute("SELECT * FROM build WHERE user_id = ?", session["user_id"])
+
+        # redirect user to the index page if user data exists
+        if user_info:
+            return redirect("/")
+        else:   
+            return render_template("introduction.html")
 
 
