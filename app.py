@@ -129,6 +129,15 @@ def search():
     return render_template("search.html", foods=foods)
 
         
+@app.route("/introduction")
+def intro():
+    weight = request.form.get("weight")
+    height = request.form.get("height")
+    freq = request.form.get("freq")
+    goal = request.form.get("goal")
 
+    db.execute("INSERT INTO build (user_id, height, weight, freq, goal) VALUES (?, ?, ?, ?, ?)", session["user_id"], height, weight, freq, goal)
+
+    return redirect("/")
 
 
