@@ -1,5 +1,6 @@
 import csv
 import requests
+import re
 
 from flask import redirect, render_template, session
 from functools import wraps
@@ -43,7 +44,12 @@ def lookup(food):
     food_list = []
 
     for row in data:
-        if row["name"].lower().__contains__(food.lower()):
+        # if row["name"].lower().__contains__(food.lower()):
+        #     food_list.append(row)
+        # if food.lower() in row["name"]:
+        #     food_list.append(row)
+
+        if re.search(r'\b' + re.escape(food.lower()) + r'\b', row["name"]):
             food_list.append(row)
             
     return food_list
