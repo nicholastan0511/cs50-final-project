@@ -27,15 +27,57 @@ def after_request(response):
     response.headers["Pragma"] = "no-cache"
     return response
 
-@app.route("/")
+@app.route("/", methods=["GET", "POST"])
 @login_required
 def index():
-    bmi_res = bmi(session["user_id"])
-    bmr_res = bmr(session["user_id"])
-    body_type = define_user(session["user_id"], bmi_res)
-    intake = calculate(session["user_id"], body_type, bmr_res)
+    # get current time
+    current_datetime = datetime.datetime.now()
+    formatted_datetime = current_datetime.strftime("%Y-%m-%d")
 
-    return render_template("index.html", protein_min=intake["pro_min"], protein_max=intake["pro_max"], calorie=round(intake["calorie"]))
+    if request.method == "GET":
+
+    # calculate daily intake
+        bmi_res = bmi(session["user_id"])
+        bmr_res = bmr(session["user_id"])
+        body_type = define_user(session["user_id"], bmi_res)
+        intake = calculate(session["user_id"], body_type, bmr_res)
+
+        daily_diet = db.execute("SELECT * FROM daily_diet WHERE user_id = ?", session["user_id"])
+
+        daily_progress = db.execute("SELECT SUM(protein) AS pro_sum, SUM(calories) AS cal_sum FROM daily_diet WHERE date = ?", formatted_datetime)
+        
+        return render_template("index.html", protein_min=intake["pro_min"], protein_max=intake["pro_max"], calorie=round(intake["calorie"]), daily_diet=daily_diet, pro_progress=daily_progress[0]["pro_sum"], cal_progress=daily_progress[0]["cal_sum"])
+    
+    else:
+    
+        # add food to daily consumption via the search page
+        food = request.form.get("name")
+        if food:
+            protein = request.form.get("protein")
+            calories = request.form.get("calories")
+
+            if not protein or not calories:
+                return apology("Please input all fields!", 403)
+
+            db.execute("INSERT INTO daily_diet (user_id, food, protein, calories, date) VALUES (?, ?, ?, ?, ?)", session["user_id"], food, protein, calories, formatted_datetime)
+            return redirect("/")
+        
+        # add food to daily consumption via modal page
+        food_name = request.form.get("food_name")
+        if food_name:
+            protein_amount = request.form.get("protein_amount")
+            calories_amount = request.form.get("calories_amount")
+
+            if not protein_amount or not calories_amount:
+                return apology("PLease input all fields!", 403)
+
+            db.execute("INSERT INTO daily_diet (user_id, food, protein, calories, date) VALUES (?, ?, ?, ?, ?)", session["user_id"], food_name, protein_amount, calories_amount, formatted_datetime)
+            return redirect("/")
+        else:
+            return apology("Please fill all the input fields!", 403)
+
+
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
