@@ -49,29 +49,29 @@ def lookup(food):
     return food_list
 
 def calculate(user_id, body_type, bmr):
-    data = db.execute("SELECT * FROM data WHERE user_id = ?", user_id)
+    data = db.execute("SELECT * FROM build WHERE user_id = ?", user_id)
 
     intake = {}
 
     # source: examine.com
     # if user is active and has healthy weight targets muscle gain and fat loss
     if not data[0]["goal"] == 0 and body_type["exercise_level"] == "active" and body_type["bmi"] < 2:
-        intake["pro_min"] = data["weight"] * 1.6
-        intake["pro_max"] = data["weight"] * 2.4
+        intake["pro_min"] = data[0]["weight"] * 1.6
+        intake["pro_max"] = data[0]["weight"] * 2.4
 
     # if user is sedentary and has healthy weight
     elif body_type["exercise_level"] == "sedentary" and body_type["bmi"] < 2:
-        intake["pro_min"] = data["weight"] * 1.2
-        intake["pro_max"] = data["weight"] * 1.8
+        intake["pro_min"] = data[0]["weight"] * 1.2
+        intake["pro_max"] = data[0]["weight"] * 1.8
 
     # if user is active and targets maintenence
     elif data[0]["goal"] == 0 and body_type["exercise_level"] == "active" and body_type["bmi"] < 2:
-        intake["pro_min"] = data["weight"] * 1.4
-        intake["pro_max"] = data["weight"] * 2.0
+        intake["pro_min"] = data[0]["weight"] * 1.4
+        intake["pro_max"] = data[0]["weight"] * 2.0
 
     elif body_type["bmi"] >= 2:
-        intake["pro_min"] = data["weight"] * 1.2
-        intake["pro_max"] = data["weight"] * 1.5
+        intake["pro_min"] = data[0]["weight"] * 1.2
+        intake["pro_max"] = data[0]["weight"] * 1.5
 
     # source: ministry of health of UAE
     # calculate calorie intake based on activity level
@@ -83,7 +83,7 @@ def calculate(user_id, body_type, bmr):
     return intake
 
 def define_user(user_id, bmi):
-    data = db.execute("SELECT * FROM data WHERE user_id = ?", user_id)
+    data = db.execute("SELECT * FROM build WHERE user_id = ?", user_id)
 
     # store all information about the user physical type in the dictionary
     body_type = {}
@@ -107,13 +107,13 @@ def define_user(user_id, bmi):
       
 
 def bmi(user_id):
-    data = db.execute("SELECT height, weight FROM data WHERE user_id = ?", user_id)
+    data = db.execute("SELECT height, weight FROM build WHERE user_id = ?", user_id)
 
     # formula for bmi
     return float(data[0]["weight"] / (data[0]["height"] ** 2))
 
 def bmr(user_id):
-    data = db.execute("SELECT age, height, weight FROM data WHERE user_id = ?", user_id)
+    data = db.execute("SELECT sex, age, height, weight FROM build WHERE user_id = ?", user_id)
 
     if data[0]["sex"] == 0:
         return 10 * data[0]["weight"] + 6.25 * data[0]["height"] - 5 * data[0]["age"] + 5

@@ -6,7 +6,7 @@ from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import apology, login_required, lookup
+from helpers import apology, login_required, lookup, bmi, bmr, define_user, calculate
 
 # Configure application
 app = Flask(__name__)
@@ -30,10 +30,12 @@ def after_request(response):
 @app.route("/")
 @login_required
 def index():
-    d
+    bmi_res = bmi(session["user_id"])
+    bmr_res = bmr(session["user_id"])
+    body_type = define_user(session["user_id"], bmi_res)
+    intake = calculate(session["user_id"], body_type, bmr_res)
 
-
-    return apology("mamamia")
+    return render_template("index.html", protein_min=intake["pro_min"], protein_max=intake["pro_max"], calorie=round(intake["calorie"]))
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
