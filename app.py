@@ -42,11 +42,13 @@ def index():
         body_type = define_user(session["user_id"], bmi_res)
         intake = calculate(session["user_id"], body_type, bmr_res)
 
-        daily_diet = db.execute("SELECT * FROM daily_diet WHERE user_id = ?", session["user_id"])
+        daily_diet = db.execute("SELECT * FROM daily_diet WHERE user_id = ? AND date = ?", session["user_id"], formatted_datetime)
 
-        daily_progress = db.execute("SELECT SUM(protein) AS pro_sum, SUM(calories) AS cal_sum FROM daily_diet WHERE date = ?", formatted_datetime)
+        daily_progress = db.execute("SELECT SUM(protein) AS pro_sum, SUM(calories) AS cal_sum FROM daily_diet WHERE date = ? AND user_id = ?", formatted_datetime, session["user_id"])
+
+        status = db.execute("SELECT * FROM build WHERE user_id = ?", session["user_id"])
         
-        return render_template("index.html", protein_min=intake["pro_min"], protein_max=intake["pro_max"], calorie=round(intake["calorie"]), daily_diet=daily_diet, pro_progress=daily_progress[0]["pro_sum"], cal_progress=daily_progress[0]["cal_sum"])
+        return render_template("index.html", protein_min=intake["pro_min"], protein_max=intake["pro_max"], calorie=round(intake["calorie"]), daily_diet=daily_diet, pro_progress=daily_progress[0]["pro_sum"], cal_progress=daily_progress[0]["cal_sum"], bmi=bmi_res, status=status)
     
     else:
     
@@ -73,8 +75,28 @@ def index():
 
             db.execute("INSERT INTO daily_diet (user_id, food, protein, calories, date) VALUES (?, ?, ?, ?, ?)", session["user_id"], food_name, protein_amount, calories_amount, formatted_datetime)
             return redirect("/")
+        
+        
+        # modify physical status
+        weight = float(request.form.get("weight_mod"))
+        if weight:
+            age = float(request.form.get("age"))
+            height = float(request.form.get("height_mod"))
+            goal = request.form.get("goal_mod")
+            freq = request.form.get("freq_mod")
+
+            if not height or not goal or not freq:
+                return apology("Please fill all the input fields!", 403)
+            elif height <= 0 or height > 300 or weight <= 0 or weight > 200:
+                return apology("Please input appropriate number within the fields")
+
+            db.execute("UPDATE build SET height = ?, weight = ?, goal = ?, freq = ? WHERE user_id = ?", height, weight, goal, freq, session["user_id"])
+            return redirect("/")
+
+        # a catchall apology
         else:
             return apology("Please fill all the input fields!", 403)
+       
 
 
 

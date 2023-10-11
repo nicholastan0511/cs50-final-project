@@ -49,7 +49,7 @@ def lookup(food):
         # if food.lower() in row["name"]:
         #     food_list.append(row)
 
-        if re.search(r'\b' + re.escape(food.lower()) + r'\b', row["name"]):
+        if re.search(r'\b' + re.escape(food.lower()) + r'\b', row["name"].lower()):
             food_list.append(row)
             
     return food_list
@@ -116,7 +116,8 @@ def bmi(user_id):
     data = db.execute("SELECT height, weight FROM build WHERE user_id = ?", user_id)
 
     # formula for bmi
-    return float(data[0]["weight"] / (data[0]["height"] ** 2))
+    # return only two decimal points
+    return float("{:.2f}".format(float(data[0]["weight"] / (float(data[0]["height"])/100) ** 2)))
 
 def bmr(user_id):
     data = db.execute("SELECT sex, age, height, weight FROM build WHERE user_id = ?", user_id)
