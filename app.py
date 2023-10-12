@@ -226,4 +226,11 @@ def todolist():
         todo = request.form.get("todo")
 
         if not todo:
-            return apology("Please ", 400)
+            return apology("Please input todo ", 400)
+        
+        db.execute("INSERT INTO todolist (user_id, todo, deadline) VALUES (?, ?, ?)", session["user_id"], todo, 1)
+        return redirect("/todolist")
+    else:
+        todolist = db.execute("SELECT * FROM todolist WHERE user_id = ?", session["user_id"])
+
+        return render_template("todolist.html", todolist=todolist)
