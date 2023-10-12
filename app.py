@@ -80,7 +80,7 @@ def index():
         # modify physical status
         weight = float(request.form.get("weight_mod"))
         if weight:
-            age = float(request.form.get("age"))
+            age = request.form.get("age_mod")
             height = float(request.form.get("height_mod"))
             goal = request.form.get("goal_mod")
             freq = request.form.get("freq_mod")
@@ -90,17 +90,13 @@ def index():
             elif height <= 0 or height > 300 or weight <= 0 or weight > 200:
                 return apology("Please input appropriate number within the fields")
 
-            db.execute("UPDATE build SET height = ?, weight = ?, goal = ?, freq = ? WHERE user_id = ?", height, weight, goal, freq, session["user_id"])
+            db.execute("UPDATE build SET age = ?, height = ?, weight = ?, goal = ?, freq = ? WHERE user_id = ?", age, height, weight, goal, freq, session["user_id"])
             return redirect("/")
 
         # a catchall apology
         else:
             return apology("Please fill all the input fields!", 403)
        
-
-
-
-
 @app.route("/login", methods=["GET", "POST"])
 def login():
     """Log user in"""
@@ -224,3 +220,10 @@ def intro():
             return render_template("introduction.html")
 
 
+@app.route("/todolist", methods=["GET", "POST"])
+def todolist():
+    if request.method == "POST":
+        todo = request.form.get("todo")
+
+        if not todo:
+            return apology("Please ", 400)
