@@ -228,9 +228,27 @@ def todolist():
         if not todo:
             return apology("Please input todo ", 400)
         
+        # javascript will automatically submit the form if a checkbox is checked
+        # how do you handle multiple check requests?
+        # you don't because the page will be reloaded everytime a checkbox is checked
+        # but every todos will have the same name
+        # unless they don't
+        
+        for i in range(1,100):
+            check = request.form.get(f"check{i}")
+            if check:
+                db.execute("UPDATE todolist SET done = ? WHERE todo = ? AND user_id = ?", "true", check, session["user_id"])
+            elif check == "":
+                # but here check returns an empty string, so how do you identify the todo?
+                db.execute("UPDATE todolist SET done = ? WHERE todo = ? AND user_id = ?", "false", check, session["user_id"])
+            else:
+                break
+
         db.execute("INSERT INTO todolist (user_id, todo, deadline) VALUES (?, ?, ?)", session["user_id"], todo, 1)
         return redirect("/todolist")
     else:
+
+
         todolist = db.execute("SELECT * FROM todolist WHERE user_id = ?", session["user_id"])
 
         return render_template("todolist.html", todolist=todolist)
