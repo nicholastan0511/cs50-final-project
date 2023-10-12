@@ -1,0 +1,64 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Search
+{% endblock %}
+
+{% block main %}
+    <div class="h3 mb-5">Nutritional Fax Finder</div>
+    <form action="/search" method="get">
+        <input autocomplete="off" autofocus class="form-control mx-auto w-auto mb-3" id="food" name="food" placeholder="Egg" type="text">
+        <button class="button btn-primary mb-5" id="searchButton" type="submit">Search</button>
+    </form>
+    
+    {% if foods %}
+    <div class="container">
+        <small>(results are based on 100g serving)</small>
+        <table class="table-striped table table-dark table-bordered" id="tableSearch">
+            <thead class="headSearch">
+                <tr>
+                    <td class="w-25">Name</td>
+                    <td>Calories</td>
+                    <td>Fat</td>
+                    <td>Fiber</td>
+                    <td>Sugar</td>
+                    <td>Protein</td>
+                    <td>Calcium</td>
+                    <td></td>
+                </tr>
+            </thead>
+        
+            <tbody>
+                {% for food in foods %}
+                <tr>
+                    <td class="text-start">{{ food.name }}</td>
+                    <td>{{ food.calories }}</td>
+                    <td>{{ food.fat }}</td>
+                    <td>{{ food.fiber }}</td>
+                    <td>{{ food.sugars }}</td>
+                    <td>{{ food.protein }}</td>
+                    <td>{{ food.calcium }}</td>
+                    <td>
+                        <form action="/" method="post">
+                            <input type="hidden" name="name" value="{{ food.name }}">
+                            <input type="hidden" name="calories" value="{{ food.calories }}">
+                            <!-- <input type="hidden" name="fat" value="{{ food.fat }}">
+                            <input type="hidden" name="fiber" value="{{ food.fiber }}">
+                            <input type="hidden" name="sugars" value="{{ food.sugars }}"> -->
+                            <input type="hidden" name="protein" value="{{ food.protein }}">
+                            <!-- <input type="hidden" name="calcium" value="{{ food.calcium }}"> -->
+                            <button class="btn btn-primary" type="submit">Add</button>
+                        </form>     
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="container" id="alert-container">
+        <div class="alert alert-warning" style="display: none;">Food not found!</div>
+    </div>
+
+    {% endif %}
+{% endblock %}

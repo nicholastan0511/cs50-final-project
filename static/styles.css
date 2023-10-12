@@ -1,0 +1,14 @@
+.headSearch {
+    position: sticky;
+    top: 0;
+    color: white;
+    background-color: black;
+}
+
+body {
+    background-color: #f5f5f5;
+}
+
+.form-control-lg {
+    border-color: black;
+}
