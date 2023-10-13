@@ -9,7 +9,7 @@
     <div class="container">
         <div class="row mb-5">
             <form action="/todolist" method="post">
-                <input autocomplete="off" autofocus type="text" class="form-control-lg mb-3 border-0 me-3 w-100" name="todo" placeholder="What do you want to do today?">
+                <input autocomplete="off" id="todoField" type="text" class="form-control-lg mb-3 border-0 me-3 w-100" name="todo" placeholder="What do you want to do today?" onsubmit="return validateForm()">
                 <button class="btn btn-primary" type="submit">Add</button>
             </form>
         </div>
@@ -30,12 +30,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <form action="/todolist" method="post" id="formTodo">
+                    <form action="/todo_completed" method="post" id="formTodo">
                     {% for todo in todolist %}
                         <tr>
                             <td>
                                 <!-- using jinja syntax loop.index to generate a unique name for each input-->
                                 <input class="form-check-input" type="checkbox" value="{{ todo.todo }}" id="checkTodo{{loop.index}}" name="check{{ loop.index }}">
+                                <input type="hidden" name="checkVal{{ loop.index }}" value="{{ todo.todo }}">
                             </td>
                             <td>
                                 <label class="form-check-label" for="flexCheckDefault">{{ todo.todo }}</label>
@@ -44,6 +45,7 @@
                                 <button class="btn btn-primary">+</button>
                             </td>           
                         </tr>
+                        <button type="submit" class="d-none" id="submitButton"></button>
                     {% endfor %}
                     </form>
                 </tbody>

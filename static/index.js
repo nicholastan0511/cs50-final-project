@@ -15,6 +15,15 @@ function checkBoxCheck (checkBox, i) {
         checkBox.checked = false;
 }
 
+function validateForm () {
+    let todoField = document.querySelector('#todoField');
+    
+    if (!todoField)
+        return false;
+    else
+        return true;
+}
+
 document.addEventListener('DOMContentLoaded', function() {
 
     // turn off the alert if user clicks on search
@@ -41,10 +50,14 @@ document.addEventListener('DOMContentLoaded', function() {
     let i = 1;
     while (true) {  
         let checkBox = document.querySelector(`#checkTodo${i}`);
-
+       
         i++;
 
         if (checkBox) {
+            
+            checkBox.addEventListener('change', function() {
+                document.querySelector('#formTodo').submit();
+            })
 
             checkBoxCheck(checkBox, i);
         } else
@@ -53,6 +66,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // store in localStorage the status of the checkboxes and submit the form to the server before the page reloads
     window.addEventListener('beforeunload', function() {
+        // generally, you don't want to submit the form before unload because if the user have something within the todo field
+        // it will automatically be sent as well.
         let k = 1;
         while (true) {
             let checkBox = document.querySelector(`#checkTodo${k}`);
@@ -61,9 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 saveState(checkBox, k);
             } else
                 break;
-        }
-
-        document.querySelector('#formTodo').submit();
+        } 
     })
 
 });

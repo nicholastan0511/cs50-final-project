@@ -5,6 +5,7 @@ from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from werkzeug.security import check_password_hash, generate_password_hash
+from bs4 import BeautifulSoup
 
 from helpers import apology, login_required, lookup, bmi, bmr, define_user, calculate
 
@@ -221,37 +222,47 @@ def intro():
 
 
 @app.route("/todolist", methods=["GET", "POST"])
+@login_required
 def todolist():
     if request.method == "POST":
         todo = request.form.get("todo")
 
-        if not todo:
-            return apology("Please input todo ", 400)
+        if todo:
+            db.execute("INSERT INTO todolist (user_id, todo, deadline) VALUES (?, ?, ?)", session["user_id"], todo, 1)
         
         # javascript will automatically submit the form if a checkbox is checked
         # how do you handle multiple check requests?
         # you don't because the page will be reloaded everytime a checkbox is checked
         # but every todos will have the same name
         # unless they don't
-        
-        i = 1
-
-        while True:
-            checkbox = request.form.get(f"check{i}")
-            i += 1
-            if checkbox:
-                db.execute("UPDATE todolist SET done = ? WHERE todo = ? AND user_id = ?", "true", checkbox, session["user_id"])
-            elif checkbox == None:
-                # but here check returns an empty string, so how do you identify the todo?
-                db.execute("UPDATE todolist SET done = ? WHERE todo = ? AND user_id = ?", "false", checkbox, session["user_id"])
-            else:
-                break
-
-        db.execute("INSERT INTO todolist (user_id, todo, deadline) VALUES (?, ?, ?)", session["user_id"], todo, 1)
+    
         return redirect("/todolist")
     else:
-
-
         todolist = db.execute("SELECT * FROM todolist WHERE user_id = ?", session["user_id"])
 
         return render_template("todolist.html", todolist=todolist)
+    
+@app.route("/todo_completed", methods=["POST", "GET"])
+@login_required
+def todo_completed ():
+    if request.method == "POST":
+        for i in range(1, 50):
+            # making sure that the checkbox with a specific id exists
+            checkbox = request.form.get(f"check{i}")
+    
+            if checkbox is not None:
+                # print("sheesh")
+                db.execute("UPDATE todolist SET done = ? WHERE todo = ? AND user_id = ?", "true", checkbox, session["user_id"])
+            else:
+                # how do you get the checkbox value if it is unchecked?
+                # how to identify which todo is in question?
+                # answer: use another input under the checkbox input in html
+                # grab the value of the hidden input if request.form.get returns None
+                # checkVal{i} is the identifier of a specific checkbox
+                checkVal = request.form.get(f"checkVal{i}")
+                db.execute("UPDATE todolist SET done = ? WHERE todo = ? AND user_id = ?", "false", checkVal, session["user_id"])
+
+        return redirect('/todolist')
+    
+    return render_template('todo_completed.html')
+
