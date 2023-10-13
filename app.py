@@ -234,13 +234,16 @@ def todolist():
         # but every todos will have the same name
         # unless they don't
         
-        for i in range(1,100):
-            check = request.form.get(f"check{i}")
-            if check:
-                db.execute("UPDATE todolist SET done = ? WHERE todo = ? AND user_id = ?", "true", check, session["user_id"])
-            elif check == "":
+        i = 1
+
+        while True:
+            checkbox = request.form.get(f"check{i}")
+            i += 1
+            if checkbox:
+                db.execute("UPDATE todolist SET done = ? WHERE todo = ? AND user_id = ?", "true", checkbox, session["user_id"])
+            elif checkbox == None:
                 # but here check returns an empty string, so how do you identify the todo?
-                db.execute("UPDATE todolist SET done = ? WHERE todo = ? AND user_id = ?", "false", check, session["user_id"])
+                db.execute("UPDATE todolist SET done = ? WHERE todo = ? AND user_id = ?", "false", checkbox, session["user_id"])
             else:
                 break
 

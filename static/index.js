@@ -1,3 +1,20 @@
+function saveState (checkBox, i) {
+    localStorage.removeItem(`checkbox${i}`);
+    if (checkBox.checked == true) {
+        localStorage.setItem(`checkbox${i}`, 'yes')
+    }
+    else if (checkBox.checked == false)
+        localStorage.setItem(`checkbox${i}`, 'no');
+
+}
+
+function checkBoxCheck (checkBox, i) {
+    if (localStorage.getItem(`checkbox${i}`) == 'yes') {
+        checkBox.checked = true;
+    } else
+        checkBox.checked = false;
+}
+
 document.addEventListener('DOMContentLoaded', function() {
 
     // turn off the alert if user clicks on search
@@ -20,25 +37,31 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-
-    // check the previously checked checkboxes and vice versa
-    for (let i = 1; i < 5; i++) {  
+    // check the previously checked checkboxes and vice versa by looking at the localStorage
+    let i = 1;
+    while (true) {  
         let checkBox = document.querySelector(`#checkTodo${i}`);
 
-        checkBoxCheck(checkBox, i);
+        i++;
 
+        if (checkBox) {
+
+            checkBoxCheck(checkBox, i);
+        } else
+            break;
     }
 
-    // store in local storage the status of the checkboxes and submit the form to the server before the page reloads
+    // store in localStorage the status of the checkboxes and submit the form to the server before the page reloads
     window.addEventListener('beforeunload', function() {
-        for (let i = 1; i < 5; i++) {  
-        
-            let checkBox = document.querySelector(`#checkTodo${i}`);
-            console.log(checkBox);
-
-            saveState(checkBox, i);
-
-    }
+        let k = 1;
+        while (true) {
+            let checkBox = document.querySelector(`#checkTodo${k}`);
+            k++
+            if (checkBox) {
+                saveState(checkBox, k);
+            } else
+                break;
+        }
 
         document.querySelector('#formTodo').submit();
     })
@@ -46,21 +69,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-function saveState (checkBox, i) {
-    localStorage.removeItem(`checkbox${i}`);
-    if (checkBox.checked == true) {
-        localStorage.setItem(`checkbox${i}`, 'yes')
-    }
-    else if (checkBox.checked == false)
-        localStorage.setItem(`checkbox${i}`, 'no');
-
-}
-
-function checkBoxCheck (checkBox, i) {
-    if (localStorage.getItem(`checkbox${i}`) == 'yes') {
-        checkBox.checked = true;
-    } else
-        checkBox.checked = false;
-
-}
 
