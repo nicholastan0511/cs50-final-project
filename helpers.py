@@ -1,5 +1,4 @@
 import csv
-import requests
 import re
 
 from flask import redirect, render_template, session

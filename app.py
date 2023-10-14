@@ -17,6 +17,10 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
+# get current time
+current_datetime = datetime.datetime.now()
+formatted_datetime = current_datetime.strftime("%Y-%m-%d")
+
 # Configure CS50 Library to use SQLite database
 db = SQL("sqlite:///final.db")
 
@@ -31,9 +35,6 @@ def after_request(response):
 @app.route("/", methods=["GET", "POST"])
 @login_required
 def index():
-    # get current time
-    current_datetime = datetime.datetime.now()
-    formatted_datetime = current_datetime.strftime("%Y-%m-%d")
 
     if request.method == "GET":
 
@@ -228,14 +229,23 @@ def todolist():
         todo = request.form.get("todo")
 
         if todo:
-            db.execute("INSERT INTO todolist (user_id, todo, deadline) VALUES (?, ?, ?)", session["user_id"], todo, 1)
+            db.execute("INSERT INTO todolist (user_id, todo, deadline) VALUES (?, ?, ?)", session["user_id"], todo, 'false')
         
         # javascript will automatically submit the form if a checkbox is checked
         # how do you handle multiple check requests?
         # you don't because the page will be reloaded everytime a checkbox is checked
         # but every todos will have the same name
         # unless they don't
-    
+
+        # for i in range(1, 50):
+        #     deadline = request.form.get(f"addDeadline{i}")
+        #     deadlineVal = request.form.get(f"deadlineVal{i}")
+
+        #     if deadline is not None:
+        #         db.execute("UPDATE todolist SET deadline = ? WHERE todo = ? AND user_id = ?",  deadline, deadlineVal, session["user_id"])
+        #     elif deadline == "":
+        #         return redirect("/todolist")
+
         return redirect("/todolist")
     else:
         todolist = db.execute("SELECT * FROM todolist WHERE user_id = ?", session["user_id"])
@@ -246,11 +256,21 @@ def todolist():
 @login_required
 def todo_completed ():
     if request.method == "POST":
+     
+        # i = 1
+        # for value in checkboxes:
+        #     print(value)
+        #     if value:
+        #         db.execute("UPDATE todolist SET done = ? WHERE todo = ? AND user_id = ?", "true", value, session["user_id"])
+        #     else:
+        #         checkVal = request.form.get(f"checkVal{i}")
+        #         db.execute("UPDATE todolist SET done = ? WHERE todo = ? AND user_id = ?", "false", checkVal, session["user_id"])
+        #     i += 1
+
         for i in range(1, 50):
-            # making sure that the checkbox with a specific id exists
+        # making sure that the checkbox with a specific id exists
             checkbox = request.form.get(f"check{i}")
-    
-            # if checkbox is checked
+
             if checkbox is not None:
                 # print("sheesh")
                 db.execute("UPDATE todolist SET done = ? WHERE todo = ? AND user_id = ?", "true", checkbox, session["user_id"])
@@ -266,6 +286,7 @@ def todo_completed ():
         return redirect('/todolist')
     
     else:
+        # render only completed todos
         todo_done = db.execute("SELECT * FROM todolist WHERE user_id = ? AND done = ?", session["user_id"], "true")
     
         return render_template('todo_completed.html', todo_done=todo_done)

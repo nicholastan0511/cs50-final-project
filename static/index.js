@@ -99,26 +99,37 @@ document.addEventListener('DOMContentLoaded', function() {
     
     let deadlineButtons = document.querySelectorAll('.addDeadline');
 
+    // after the first button is removed because a deadline is added,
+    // the second button becomes the first button or first index of the deadlineButtons array
+    // we have to somehow associate the buttons with their respective parents
+
     // show input to user when add deadline button is clicked
     // associate the button with the parent using the index of the for loop
     for (let i = 0, k = deadlineButtons.length; i < k; i++) {
-
-        // index 0 is #addDeadline1, index 0 + 1 is #parentDeadline1
 
         let button = deadlineButtons[i];
         
         button.addEventListener('click', function(e) {
             e.preventDefault();
 
-            document.querySelector(`#parentDeadline${i + 1}`).removeChild(button);
+            let id = (button.id).charAt((button.id).length - 1);
+
+            document.querySelector(`#parentDeadline${id}`).removeChild(button);
           
             // add input to the parent td
             let inputDeadline = document.createElement('input');
             inputDeadline.setAttribute('type', 'date');
-            document.querySelector(`#parentDeadline${i + 1}`).appendChild(inputDeadline);
+            inputDeadline.setAttribute('name', `addDeadline${id}`);
+
+            let buttonAdd = document.createElement('button');
+            buttonAdd.classList.add('btn', 'btn-primary')
+            buttonAdd.setAttribute('type', 'submit')
+            buttonAdd.innerHTML = '+';
+
+            document.querySelector(`#parentDeadline${id}`).appendChild(inputDeadline);
+            document.querySelector(`#parentDeadline${id}`).appendChild(buttonAdd);
 
         });
-
     }
 
 });
