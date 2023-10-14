@@ -250,6 +250,7 @@ def todo_completed ():
             # making sure that the checkbox with a specific id exists
             checkbox = request.form.get(f"check{i}")
     
+            # if checkbox is checked
             if checkbox is not None:
                 # print("sheesh")
                 db.execute("UPDATE todolist SET done = ? WHERE todo = ? AND user_id = ?", "true", checkbox, session["user_id"])
@@ -264,5 +265,8 @@ def todo_completed ():
 
         return redirect('/todolist')
     
-    return render_template('todo_completed.html')
+    else:
+        todo_done = db.execute("SELECT * FROM todolist WHERE user_id = ? AND done = ?", session["user_id"], "true")
+    
+        return render_template('todo_completed.html', todo_done=todo_done)
 

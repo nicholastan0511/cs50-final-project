@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
         let k = 1;
         while (true) {
             let checkBox = document.querySelector(`#checkTodo${k}`);
-            k++
+            k++;
             if (checkBox) {
                 saveState(checkBox, k);
             } else
@@ -79,6 +79,13 @@ document.addEventListener('DOMContentLoaded', function() {
         } 
     })
 
+    // colorize the link or button when the link is clicked or when that page is loaded
+    if (window.location.pathname === '/todo_completed') {
+        document.querySelector('#todo_completed').classList.toggle('linkClicked');
+    } else if (window.location.pathname === '/todolist') {
+        document.querySelector('#todolist').classList.toggle('linkClicked');
+    }
+    
 });
 
 
