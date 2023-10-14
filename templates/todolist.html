@@ -29,24 +29,24 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <form action="/todo_completed" method="post" id="formTodo">
+                    
                     {% for todo in todolist %}
                         <tr>
                             <td>
+                                <form action="/todo_completed" method="post" id="formTodo"></form>
                                 <!-- using jinja syntax loop.index to generate a unique name for each input-->
-                                <input class="form-check-input" type="checkbox" value="{{ todo.todo }}" id="checkTodo{{loop.index}}" name="check{{ loop.index }}">
-                                <input type="hidden" name="checkVal{{ loop.index }}" value="{{ todo.todo }}">
+                                    <input class="form-check-input" type="checkbox" value="{{ todo.todo }}" id="checkTodo{{loop.index}}" name="check{{ loop.index }}">
+                                    <input type="hidden" name="checkVal{{ loop.index }}" value="{{ todo.todo }}">
+                                </form>
                             </td>
                             <td>
                                 <label class="form-check-label" for="flexCheckDefault">{{ todo.todo }}</label>
                             </td>           
-                            <td>
-                                <button class="btn btn-primary">+</button>
+                            <td id="parentDeadline{{ loop.index }}" class="parentDeadline">
+                                <button class="btn btn-primary addDeadline" id="addDeadline{{ loop.index }}">+</button>
                             </td>           
                         </tr>
-                        <button type="submit" class="d-none" id="submitButton"></button>
                     {% endfor %}
-                    </form>
                 </tbody>
             </table>
         </div>

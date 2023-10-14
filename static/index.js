@@ -24,6 +24,17 @@ function validateForm () {
         return true;
 }
 
+// Get the current date
+const currentDate = new Date();
+
+// Extract the components of the date
+const year = currentDate.getFullYear();
+const month = currentDate.getMonth() + 1; // Adding 1 because January is 0
+const day = currentDate.getDate();
+
+// Format the date as needed
+const formattedDate = year + "-" + month + "-" + day;
+
 document.addEventListener('DOMContentLoaded', function() {
 
     // turn off the alert if user clicks on search
@@ -79,13 +90,37 @@ document.addEventListener('DOMContentLoaded', function() {
         } 
     })
 
-    // colorize the link or button when the link is clicked or when that page is loaded
+    // colorize the link or button when the link is clicked or when that page is loaded in todolist section
     if (window.location.pathname === '/todo_completed') {
         document.querySelector('#todo_completed').classList.toggle('linkClicked');
     } else if (window.location.pathname === '/todolist') {
         document.querySelector('#todolist').classList.toggle('linkClicked');
     }
     
+    let deadlineButtons = document.querySelectorAll('.addDeadline');
+
+    // show input to user when add deadline button is clicked
+    // associate the button with the parent using the index of the for loop
+    for (let i = 0, k = deadlineButtons.length; i < k; i++) {
+
+        // index 0 is #addDeadline1, index 0 + 1 is #parentDeadline1
+
+        let button = deadlineButtons[i];
+        
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+
+            document.querySelector(`#parentDeadline${i + 1}`).removeChild(button);
+          
+            // add input to the parent td
+            let inputDeadline = document.createElement('input');
+            inputDeadline.setAttribute('type', 'date');
+            document.querySelector(`#parentDeadline${i + 1}`).appendChild(inputDeadline);
+
+        });
+
+    }
+
 });
 
 
