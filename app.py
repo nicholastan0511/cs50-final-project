@@ -52,8 +52,14 @@ def index():
         
         return render_template("index.html", protein_min=intake["pro_min"], protein_max=intake["pro_max"], calorie=round(intake["calorie"]), daily_diet=daily_diet, pro_progress=daily_progress[0]["pro_sum"], cal_progress=daily_progress[0]["cal_sum"], bmi=bmi_res, status=status)
     
+    # if request method is post
     else:
-    
+
+        delFood = request.form.get("delFood")
+        if delFood:
+            db.execute("DELETE FROM daily_diet WHERE user_id = ? AND food = ?", session["user_id"], delFood)
+            return redirect("/")
+
         # add food to daily consumption via the search page
         food = request.form.get("name")
         if food:
@@ -75,12 +81,17 @@ def index():
             if not protein_amount or not calories_amount:
                 return apology("PLease input all fields!", 403)
 
-            db.execute("INSERT INTO daily_diet (user_id, food, protein, calories, date) VALUES (?, ?, ?, ?, ?)", session["user_id"], food_name, protein_amount, calories_amount, formatted_datetime)
+            db.execute("INSERT INTO daily_diet (user_id, food, protein, calories, date) VALUES (?, ?, ?, ?, ?)", session["user_id"], food_name, protein_amount + " g", calories_amount, formatted_datetime)
             return redirect("/")
         
         
         # modify physical status
-        weight = float(request.form.get("weight_mod"))
+        # if user does not input any weight; to prevent floating error
+        try:
+            weight = float(request.form.get("weight_mod"))
+        except:
+            return redirect("/")
+        
         if weight:
             age = request.form.get("age_mod")
             height = float(request.form.get("height_mod"))
@@ -103,8 +114,14 @@ def index():
 def login():
     """Log user in"""
 
-    # Forget any user_id
-    session.clear()
+    # prevent user from accessing the login page when he is logged in
+    try:
+        if session["user_id"]:
+            return redirect("/")
+    except:
+
+        # Forget any user_id
+        session.clear()
 
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
@@ -228,8 +245,12 @@ def todolist():
     if request.method == "POST":
         todo = request.form.get("todo")
 
-        if todo:
-            db.execute("INSERT INTO todolist (user_id, todo, deadline) VALUES (?, ?, ?)", session["user_id"], todo, 'false')
+        
+        if todo and not todo.isspace():
+            print("test")
+            db.execute("INSERT INTO todolist (user_id, todo) VALUES (?, ?)", session["user_id"], todo)
+
+        return redirect("/todolist")
         
         # javascript will automatically submit the form if a checkbox is checked
         # how do you handle multiple check requests?
