@@ -25,7 +25,8 @@
                 <thead class="table-secondary">
                     <tr>
                         <td class="col-1">Check</td>
-                        <td class="col-11">Todo</td>
+                        <td class="col-10">Todo</td>
+                        <td class="col-1"></td>
                     </tr>
                 </thead>
                 <tbody>
@@ -39,7 +40,10 @@
                             </td>
                             <td>
                                 <label class="form-check-label" for="flexCheckDefault">{{ todo.todo }}</label>
-                            </td>           
+                            </td>         
+                            <td>
+                                <button class="btn btn-primary" type="submit" name="deleteRow" value="{{ todo.todo }}">🗑️</button>
+                            </td>  
                             <!-- <td>
                                 {% if todo.deadline != 'false' %}
                                 <span>{{ todo.deadline }}</span>

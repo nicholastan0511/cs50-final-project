@@ -244,14 +244,15 @@ def intro():
 def todolist():
     if request.method == "POST":
         todo = request.form.get("todo")
-
         
         if todo and not todo.isspace():
-            print("test")
             db.execute("INSERT INTO todolist (user_id, todo) VALUES (?, ?)", session["user_id"], todo)
+
 
         return redirect("/todolist")
         
+        
+
         # javascript will automatically submit the form if a checkbox is checked
         # how do you handle multiple check requests?
         # you don't because the page will be reloaded everytime a checkbox is checked
@@ -267,7 +268,7 @@ def todolist():
         #     elif deadline == "":
         #         return redirect("/todolist")
 
-        return redirect("/todolist")
+     
     else:
         todolist = db.execute("SELECT * FROM todolist WHERE user_id = ?", session["user_id"])
 
@@ -288,6 +289,13 @@ def todo_completed ():
         #         db.execute("UPDATE todolist SET done = ? WHERE todo = ? AND user_id = ?", "false", checkVal, session["user_id"])
         #     i += 1
 
+        deleteRow = request.form.get("deleteRow")
+        print(deleteRow)
+
+        if deleteRow:
+            db.execute("DELETE FROM todolist WHERE user_id = ? AND todo = ?", session["user_id"], deleteRow)
+            return redirect("/todolist")
+
         for i in range(1, 50):
         # making sure that the checkbox with a specific id exists
             checkbox = request.form.get(f"check{i}")
@@ -304,7 +312,7 @@ def todo_completed ():
                 checkVal = request.form.get(f"checkVal{i}")
                 db.execute("UPDATE todolist SET done = ? WHERE todo = ? AND user_id = ?", "false", checkVal, session["user_id"])
 
-        return redirect('/todolist')
+        return redirect("/todolist")
     
     else:
         # render only completed todos

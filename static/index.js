@@ -132,6 +132,14 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    // let deleteRowButton = document.querySelectorAll('#deleteRow')
+
+    // deleteRowButton.forEach((button) => {
+    //     button.addEventListener('clicked', function() {
+    //         button.
+    //     })
+    // });
+
 });
 
 
