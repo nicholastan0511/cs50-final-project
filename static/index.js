@@ -132,13 +132,19 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // let deleteRowButton = document.querySelectorAll('#deleteRow')
+    document.querySelectorAll('#editButton').forEach((button, index) => {
+        button.addEventListener('click', function (e) {
+            // index + 1 because jinja is one-indexing
+            console.log(index + 1);
+            e.preventDefault();
+            let editInput = document.querySelector(`#editInput${index + 1}`);
+            editInput.removeAttribute('readonly');
+            button.remove();
 
-    // deleteRowButton.forEach((button) => {
-    //     button.addEventListener('clicked', function() {
-    //         button.
-    //     })
-    // });
+            document.querySelector(`#editConfirm${index + 1}`).style.display = 'block'
+        });
+
+    });
 
 });
 

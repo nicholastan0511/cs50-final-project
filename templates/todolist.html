@@ -21,7 +21,7 @@
 
         <div class="container row">
            
-            <table class="table table-warning table-bordered table-striped-columns table-hover">
+            <table class="table table-primary table-bordered table-striped-columns table-hover">
                 <thead class="table-secondary">
                     <tr>
                         <td class="col-1">Check</td>
@@ -29,7 +29,7 @@
                         <td class="col-1"></td>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="align-middle">
                     <form action="/todo_completed" method="post" id="formTodo">
                     {% for todo in todolist %}
                         <tr>           
@@ -39,22 +39,15 @@
                                 <input type="hidden" name="checkVal{{ loop.index }}" value="{{ todo.todo }}">
                             </td>
                             <td>
-                                <label class="form-check-label" for="flexCheckDefault">{{ todo.todo }}</label>
+                                <input type="hidden" name="previousVal{{ loop.index }}" value="{{ todo.todo }}">
+                                <!-- do not use disabled attribute because the input won't be sent along with the form. Use readonly attribute instead :D -->
+                                <input type="text" name="editInput{{ loop.index }}" class="form-control" id="editInput{{ loop.index }}" value="{{ todo.todo }}" readonly>
                             </td>         
-                            <td>
+                            <td class="tdButton">
+                                <button class="btn btn-primary" id="editButton">Edit</button>
+                                <button class="btn btn-primary hiddenButton" id="editConfirm{{ loop.index }}">OK</button>
                                 <button class="btn btn-primary" type="submit" name="deleteRow" value="{{ todo.todo }}">🗑️</button>
                             </td>  
-                            <!-- <td>
-                                {% if todo.deadline != 'false' %}
-                                <span>{{ todo.deadline }}</span>
-                                {% else %}
-                                <form action="/todolist" method="post" id="parentDeadline{{ loop.index }}" class="parentDeadline">
-                                    <button class="btn btn-primary addDeadline" id="addDeadline{{ loop.index }}">+</button>
-                                    <input type="hidden" name="deadlineVal{{ loop.index }}" value="{{ todo.todo }}">
-                                </form>
-                                {% endif %}
-                            </td> -->
-                            <!-- <button type="submit" class="d-none" id="submitButton"></button> -->
                         </tr>
                     {% endfor %}
                     </form>    

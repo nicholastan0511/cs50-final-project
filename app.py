@@ -278,27 +278,33 @@ def todolist():
 @login_required
 def todo_completed ():
     if request.method == "POST":
-     
-        # i = 1
-        # for value in checkboxes:
-        #     print(value)
-        #     if value:
-        #         db.execute("UPDATE todolist SET done = ? WHERE todo = ? AND user_id = ?", "true", value, session["user_id"])
-        #     else:
-        #         checkVal = request.form.get(f"checkVal{i}")
-        #         db.execute("UPDATE todolist SET done = ? WHERE todo = ? AND user_id = ?", "false", checkVal, session["user_id"])
-        #     i += 1
 
+        # select current todos to check whether the a user edited a todo
+        # currentTodos = db.execute("SELECT todo FROM todolist WHERE user_id = ?", session["user_id"])
+
+        # delete a row of data from todolist if user clicks on the trash button
         deleteRow = request.form.get("deleteRow")
-        print(deleteRow)
+        # print(deleteRow)
 
         if deleteRow:
             db.execute("DELETE FROM todolist WHERE user_id = ? AND todo = ?", session["user_id"], deleteRow)
             return redirect("/todolist")
+        
+        # print(currentTodos)
 
         for i in range(1, 50):
         # making sure that the checkbox with a specific id exists
             checkbox = request.form.get(f"check{i}")
+
+            editInput = request.form.get(f"editInput{i}")
+
+            previousVal = request.form.get(f"previousVal{i}")
+
+            print(editInput)
+            print(previousVal)
+
+            if not editInput == previousVal:
+                db.execute("UPDATE todolist SET todo = ? WHERE todo = ? AND user_id = ?", editInput, previousVal, session["user_id"])
 
             if checkbox is not None:
                 # print("sheesh")
@@ -311,6 +317,7 @@ def todo_completed ():
                 # checkVal{i} is the identifier of a specific checkbox
                 checkVal = request.form.get(f"checkVal{i}")
                 db.execute("UPDATE todolist SET done = ? WHERE todo = ? AND user_id = ?", "false", checkVal, session["user_id"])
+
 
         return redirect("/todolist")
     
