@@ -21,15 +21,15 @@
 
         <div class="container row">
            
-            <table class="table table-primary table-bordered table-striped-columns table-hover">
-                <thead class="table-secondary">
+            <table class="table table-dark table-bordered table-hover">
+                <thead>
                     <tr>
                         <td class="col-1">Check</td>
                         <td class="col-10">Todo</td>
                         <td class="col-1"></td>
                     </tr>
                 </thead>
-                <tbody class="align-middle">
+                <tbody class="align-middle table-light">
                     <form action="/todo_completed" method="post" id="formTodo">
                     {% for todo in todolist %}
                         <tr>           
@@ -41,7 +41,7 @@
                             <td>
                                 <input type="hidden" name="previousVal{{ loop.index }}" value="{{ todo.todo }}">
                                 <!-- do not use disabled attribute because the input won't be sent along with the form. Use readonly attribute instead :D -->
-                                <input type="text" name="editInput{{ loop.index }}" class="form-control" id="editInput{{ loop.index }}" value="{{ todo.todo }}" readonly>
+                                <input type="text" name="editInput{{ loop.index }}" class="form-control input" id="editInput{{ loop.index }}" value="{{ todo.todo }}" readonly>
                             </td>         
                             <td class="tdButton">
                                 <button class="btn btn-primary" id="editButton">Edit</button>

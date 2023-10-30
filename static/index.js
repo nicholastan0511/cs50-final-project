@@ -44,8 +44,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // show the alert if execute is true and then toggle execute to false so that when the page is refreshed the alert is not shown again (original value display: none)
     if (localStorage.getItem('execute') == 'true') {
-        document.querySelector('.alert').style.display = 'block';
-        localStorage.setItem('execute', false);
+        // check if the alert node exist (if the user is on the seach food page)
+        if(document.querySelector('.alert')) {
+            document.querySelector('.alert').style.display = 'block';
+            localStorage.setItem('execute', false);
+        }
     } 
 
     // when search results are none toggle the execute to true so that when the page is refreshed the alert is shown via the previous if condition

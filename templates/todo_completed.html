@@ -15,13 +15,13 @@
         </div>
 
         <div class="container row">
-            <table class="table table-light table-bordered">
-                <thead class="table-secondary">
+            <table class="table table-dark table-bordered">
+                <thead>
                     <tr>
-                        <td class="col-12">Todo</td>
+                        <td class="col-12">Completed</td>
                     </tr>
                 </thead>
-                <tbody class="table-warning">
+                <tbody class="table-light">
                     <form action="/todo_completed" method="post" id="formTodo">
                     {% for todo in todo_done %}
                         <tr>
