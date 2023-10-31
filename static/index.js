@@ -38,9 +38,11 @@ const formattedDate = year + "-" + month + "-" + day;
 document.addEventListener('DOMContentLoaded', function() {
 
     // turn off the alert if user clicks on search
-    document.querySelector('#search').addEventListener('click', function() {
-        document.querySelector('.alert').style.display = 'none';
-    });
+    if (document.querySelector('#search')) {
+        document.querySelector('#search').addEventListener('click', function() {
+            document.querySelector('.alert').style.display = 'none';
+        });
+    }
 
     // show the alert if execute is true and then toggle execute to false so that when the page is refreshed the alert is not shown again (original value display: none)
     if (localStorage.getItem('execute') == 'true') {
@@ -149,6 +151,32 @@ document.addEventListener('DOMContentLoaded', function() {
 
     });
 
+    let theme = document.querySelector('#theme')
+
+    theme.addEventListener('click', function() {
+        // if the theme is currently light, change it to the dark theme
+        if (localStorage.getItem('dark') == 'light') {
+            document.querySelector('body').classList.toggle('dark');
+            theme.innerHTML = '☀️';
+            localStorage.setItem('dark', 'dark');
+            // if the theme is currently dark, change it to the light theme
+        } else if (localStorage.getItem('dark') == 'dark') {
+            document.querySelector('body').classList.toggle('dark');
+            theme.innerHTML = '🌛'
+            localStorage.setItem('dark', 'light');
+           
+        }
+    });
+
+    if (localStorage.getItem('dark') == 'light') {
+        document.querySelector('body').classList.remove('dark');
+        theme.innerHTML = '🌛';
+    } else {
+        document.querySelector('body').classList.toggle('dark');
+        theme.innerHTML = '☀️';
+    }
+       
+ 
 });
 
 

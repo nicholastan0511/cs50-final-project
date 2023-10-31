@@ -5,10 +5,6 @@
     background-color: black;
 }
 
-body {
-    background-color: #1c1c33;
-}
-
 .form-control-lg {
     border-color: black;
 }
@@ -37,3 +33,13 @@ body {
     gap: 10px;
 }
 
+.dark {
+    background-color:  #1c1c33;
+    color: white;
+}
+
+#theme {
+    font-size: 1.4em;
+    vertical-align: middle;
+    margin: auto 5px;
+}
