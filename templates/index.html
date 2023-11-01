@@ -50,13 +50,13 @@
         
         <!-- modal -->
         <div class="container mb-4">
-            <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modalmod">Modify</button>
-            <div class="modal fade modal-lg" id="modalmod">
+            <button class="btn btn-sm btn-primary btn-style" data-bs-toggle="modal" data-bs-target="#modalmod">Modify</button>
+            <div class="modal fade modal-lg no-color" id="modalmod">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h3>Modify Physical Status</h3>
-                            <button class="btn-close" data-bs-dismiss="modal"></button>
+                            <button class="btn-close btn-style" data-bs-dismiss="modal"></button>
                         </div>
                         <div class="modal-body">
                             <form method="post" action="/">
@@ -100,7 +100,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <button class="btn btn-primary" id="addButton" data-bs-dismiss="modal" type="submit">Modify</button>
+                                <button class="btn btn-primary btn-style" id="addButton" data-bs-dismiss="modal" type="submit">Modify</button>
                             </form>
                         </div>
                     </div>
@@ -166,7 +166,7 @@
                 <td>
                     <form action="/" method="post">
                         <input type="hidden" value="{{ consumption.food }}" name="delFood">
-                        <button type="submit" class="btn btn-primary">🗑️</button>
+                        <button type="submit btn-style" class="btn btn-primary">🗑️</button>
                     </form>
                 </td>
             </tr>
@@ -176,14 +176,14 @@
 
     <!-- modal -->
     <div class="container">
-        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal">Add</button>
-        <a href="/search" class="btn btn-sm btn-primary">Search for food</a>
-        <div class="modal fade modal-lg" id="modal">
+        <button class="btn btn-sm btn-primary btn-style" data-bs-toggle="modal" data-bs-target="#modal">Add</button>
+        <a href="/search" class="btn btn-sm btn-primary link-btn-style">Search for food</a>
+        <div class="modal fade modal-lg no-color" id="modal">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h3>Add consumption</h3>
-                        <button class="btn-close" data-bs-dismiss="modal"></button>
+                        <button class="btn-close btn-style" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
                         <form method="post" action="/">
@@ -207,7 +207,7 @@
                                     <input autocomplete="off" autofocus id="calorie" name="calories_amount" class="form-control-md" type="number" placeholder="in kcal">
                                 </div>
                             </div>
-                            <button class="btn btn-primary" id="addButton" data-bs-dismiss="modal" type="submit">Add</button>
+                            <button class="btn btn-primary btn-style" id="addButton" data-bs-dismiss="modal" type="submit">Add</button>
                         </form>
                     </div>
                 </div>

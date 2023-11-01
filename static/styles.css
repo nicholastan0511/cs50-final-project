@@ -38,8 +38,21 @@
     color: white;
 }
 
+.no-color {
+    color: black;
+}
+
 #theme {
     font-size: 1.4em;
     vertical-align: middle;
     margin: auto 5px;
+}
+
+.btn-style:hover, .link-btn-style:hover {
+    box-shadow: 2px 2px blue;
+    transform: scale(1.1)
+}
+
+.btn-style, .link-btn-style {
+    transition: all 150ms; 
 }
