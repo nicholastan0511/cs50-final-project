@@ -61,22 +61,22 @@ def calculate(user_id, body_type, bmr):
     # source: examine.com
     # if user is active and has healthy weight targets muscle gain and fat loss
     if not data[0]["goal"] == 0 and body_type["exercise_level"] == "active" and body_type["bmi"] < 2:
-        intake["pro_min"] = data[0]["weight"] * 1.6
-        intake["pro_max"] = data[0]["weight"] * 2.4
+        intake["pro_min"] = round(data[0]["weight"] * 1.6, 2)
+        intake["pro_max"] = round(data[0]["weight"] * 2.4, 2)
 
     # if user is sedentary and has healthy weight
     elif body_type["exercise_level"] == "sedentary" and body_type["bmi"] < 2:
-        intake["pro_min"] = data[0]["weight"] * 1.2
-        intake["pro_max"] = data[0]["weight"] * 1.8
+        intake["pro_min"] = round(data[0]["weight"] * 1.2, 2)
+        intake["pro_max"] = round(data[0]["weight"] * 1.8, 2)
 
     # if user is active and targets maintenence
     elif data[0]["goal"] == 0 and body_type["exercise_level"] == "active" and body_type["bmi"] < 2:
-        intake["pro_min"] = data[0]["weight"] * 1.4
-        intake["pro_max"] = data[0]["weight"] * 2.0
+        intake["pro_min"] = round(data[0]["weight"] * 1.4, 2)
+        intake["pro_max"] = round(data[0]["weight"] * 2.0, 2)
 
     elif body_type["bmi"] >= 2:
-        intake["pro_min"] = data[0]["weight"] * 1.2
-        intake["pro_max"] = data[0]["weight"] * 1.5
+        intake["pro_min"] = round(data[0]["weight"] * 1.2, 2)
+        intake["pro_max"] = round(data[0]["weight"] * 1.5, 2)
 
     # source: ministry of health of UAE
     # calculate calorie intake based on activity level

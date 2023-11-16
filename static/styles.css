@@ -34,7 +34,7 @@
 }
 
 .dark {
-    background-color:  #1c1c33;
+    background-color: #0f1221;
     color: white;
 }
 
@@ -50,9 +50,25 @@
 
 .btn-style:hover, .link-btn-style:hover {
     box-shadow: 2px 2px blue;
-    transform: scale(1.1)
+    transform: scale(1.1);
 }
 
 .btn-style, .link-btn-style {
     transition: all 150ms; 
+}
+
+.container-search {
+    border: 2.5px solid black;
+    border-radius: 20px;
+    width: 30%;
+    margin: 0 auto 10px auto;
+    padding: 20px 0 0 0;
+    background-color: #f7f7f7;
+    transition: all 150ms;
+}
+
+.container-search:hover {
+    background-color: aliceblue;
+    transform: scale(1.05);
+    box-shadow: 10px 10px black;
 }
