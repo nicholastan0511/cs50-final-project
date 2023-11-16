@@ -1,4 +1,4 @@
-# cs50-final-project
+# Swole Up
 #### Video Demo:  <https://youtu.be/Bl4OKj7l5Nc>
 #### Description: 
 This web application tracks your daily protein and calorie intake based on the foods you consume. The numbers are determined through your bmi, which is
